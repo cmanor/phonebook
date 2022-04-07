@@ -2,7 +2,8 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
-// app.use(morgan("tiny")); can't use this and a custom token apparently
+// app.use(morgan("tiny")); 
+// can't use this and a custom token apparently
 app.use(express.json());
 ///have morgan return data in a post request
 morgan.token('DEEZ',  (req) => {
@@ -74,13 +75,13 @@ const generateId = (IdMax) => Math.floor(Math.random() * IdMax);
 app.post("/api/persons", (request, response) => 
 {
   const body = request.body;
-  // error parameters for name
+  // error conditions for name
   if (!body.name) {
     return response.status(400).json({
       error: "name missing",
     });
   }
-  //error parameters for number
+  //error conditions for number
   if (!body.number) {
     return response.status(400).json({
       error: "number missing",
@@ -94,7 +95,7 @@ app.post("/api/persons", (request, response) =>
   };
   //makes sure no duplicate names
   for (i = 0; i < persons.length; i++) {
-    if (!body.name == persons[i].name) {
+    if (body.name == persons[i].name) {
       return response.status(400).json({
         error: "name must be unique",
       });
