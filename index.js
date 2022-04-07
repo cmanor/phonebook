@@ -1,9 +1,21 @@
+//packages or middleware or some shit
 const express = require("express");
-// const { request } = require("http");
 const app = express();
-
+const morgan = require("morgan");
+// app.use(morgan("tiny")); can't use this and a custom token apparently
 app.use(express.json());
+///have morgan return data in a post request
+morgan.token('DEEZ',  (req) => {
+if (req.method === 'POST')
+{
+return JSON.stringify(req.body);
+} else {
+  return null;
+}
+});
+app.use(morgan(":DEEZ"));
 
+//data
 let persons = [
   {
     id: 1,
@@ -26,12 +38,19 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
+//info page
+
+app.get("/info", (request, response) => {
+  const info = persons.length;
+  const now = new Date();
+  response.send(`Phonebook has info for  ${info} people <br>${now}`);
+});
 
 // info for the perons page
 app.get("/api/persons", (request, response) => {
   response.json(persons);
 });
-
+//output a single entr
 app.get("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   const singleE = persons.find((singleE) => singleE.id === id);
@@ -81,17 +100,13 @@ app.post("/api/persons", (request, response) =>
       });
     }
   }
+  //adds the new person to the persons array
   persons = persons.concat(person)
+  //sends the person as the response from the server
   response.json(person)
 });
-//info page
 
-app.get("/info", (request, response) => {
-  const info = persons.length;
-  const now = new Date();
-  response.send(`Phonebook has info for  ${info} people <br>${now}`);
-});
-
+//sets up the port for the server
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
