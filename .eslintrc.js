@@ -19,11 +19,16 @@ module.exports = {
 		],
 		"quotes": [
 			"error",
-			"double"
+			"single"
 		],
 		"semi": [
 			"error",
 			"always"
-		]
+		],
+		'arrow-spacing': [
+			'error', { 'before': true, 'after': true }
+		],
+		'no-trailing-spaces': 'error',
+		'no-console': 0
 	}
 };
